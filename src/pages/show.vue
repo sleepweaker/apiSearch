@@ -3,7 +3,6 @@
         <div class="searchIn">
             <Row>
                 <Col span="3"class="serachInChange">
-
                 API
                 </Col>
                 <Col span="18">
@@ -15,19 +14,65 @@
             </Row>
 
         </div>
-        <div class="searchShow">
-
+        <div class="searchShow" style="margin-top:10px">
+            <Table :columns="columns10" :data="data9"></Table>
         </div>
     </div>
 </template>
 <script>
-export default {
-    data(){
-        return{
+ import expandRow from '../components/table-expand.vue';
+    export default {
+        components: { expandRow },
+        data () {
+            return {
+                columns10: [
+                    {
+                        type: 'expand',
+                        width: 50,
+                        render: (h, params) => {
+                            return h(expandRow, {
+                                props: {
+                                    row: params.row
+                                }
+                            })
+                        }
+                    },
+                    {
+                        title: 'Name',
+                        key: 'name'
+                    },
+                    {
+                        title: 'Age',
+                        key: 'age'
+                    },
+                    {
+                        title: 'Address',
+                        key: 'address'
+                    },
+                    {
+                        title: 'Address',
+                        key: 'address'
+                    }
+                ],
+                data9: [
+                    {
+                        name: 'John Brown',
+                        age: 18,
+                        address: 'New York No. 1 Lake Park',
+                        job: 'Data engineer',
+                        interest: 'badminton',
+                        birthday: '1991-05-14',
+                        book: 'Steve Jobs',
+                        movie: 'The Prestige',
+                        music: 'I Cry'
+                    },
+                ]
+            }
+        },
+        methods(){
 
         }
     }
-}
 </script>
 <style scoped>
     .searchIn{
