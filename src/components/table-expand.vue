@@ -7,31 +7,31 @@
     <div>
         <Row class="expand-row">
             <Col span="8">
-                <span class="expand-key">Job: </span>
-                <span class="expand-value">{{ row.job }}</span>
+                <span class="expand-key">method: </span>
+                <span class="expand-value">{{ row.method }}</span>
             </Col>
             <Col span="8">
-                <span class="expand-key">Interest: </span>
-                <span class="expand-value">{{ row.interest }}</span>
+                <span class="expand-key">path: </span>
+                <span class="expand-value">{{ row.path }}</span>
             </Col>
             <Col span="8">
-                <span class="expand-key">Birthday: </span>
-                <span class="expand-value">{{ row.birthday }}</span>
+                <span class="expand-key">prj_name: </span>
+                <span class="expand-value">{{ row.prj_name }}</span>
             </Col>
         </Row>
         <Row>
-            <Col span="8">
-                <span class="expand-key">Favorite book: </span>
-                <span class="expand-value">《{{ row.book }}》</span>
+            <Col span="24">
+                <span class="expand-key">scheme: </span>
+                <span class="expand-value">{{ row.scheme }}</span>
             </Col>
-            <Col span="8">
+            <!-- <Col span="8">
                 <span class="expand-key">Favorite movie: </span>
                 <span class="expand-value">{{ row.movie }}</span>
             </Col>
             <Col span="8">
                 <span class="expand-key">Favorite music: </span>
                 <span class="expand-value">{{ row.music }}</span>
-            </Col>
+            </Col> -->
         </Row>
     </div>
 </template>
