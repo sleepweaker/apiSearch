@@ -26,35 +26,53 @@
             </Row>
         </div>
         <div class="searchShow" style="margin-top:10px">
-            <Table :columns="columnsApi" :data="dataApi" @on-row-click='rowClick' v-if="apiShow"></Table>
+            <Table :columns="columnsApi" :data="dataApi" v-if="apiShow"></Table>
             <Table :columns="columnsName" :data="dataName" v-if="nameShow"></Table>
         </div>
     </div>
 </template>
 <script>
- import expandRow from '../components/table-expand.vue';
  import axios from 'axios'
     export default {
-        components: { expandRow },
+        // components: { expandRow },
         data () {
             return {
                 apiShow:false,
                 nameShow:false,
                 columnsApi: [
-                    {
-                        type: 'expand',
-                        width: 50,
-                        render: (h, params) => {
-                            return h(expandRow, {
-                                props: {
-                                    row: params.row
-                                },
-                            })
-                        }
-                    },
+                    // {
+                    //     type: 'expand',
+                    //     width: 50,
+                    //     render: (h, params) => {
+                    //         return h(expandRow, {
+                    //             props: {
+                    //                 row: params.row
+                    //             },
+                    //         })
+                    //     }
+                    // },
                     {
                         title: 'addr',
-                        key: 'addr'
+                        key: 'addr',
+                        width:500,
+                           render: (h, params) => {
+                            return h('a', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
+                                    },
+                                    style:{
+                                        display:'block',
+                                        height:'48px',
+                                        lineHeight:'48px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.rowClick(params)
+                                        }
+                                    }
+                                },params.row.addr)
+                           }
                     },
                     {
                         title: 'desc',
@@ -106,18 +124,13 @@
         },
         methods:{
             rowClick (data) {
+                console.log(data)
                 let _this = this
-                console.log(data.id)
-                axios.get('http://192.168.201.60:8080/frank-api?id='+data.id,{
-                }).then(function(response){
-                        _this.$router.push({path:"/frankShow",query:{dataAll:JSON.parse(response.data.Data)}})
-                    }).catch(function(err){
-                            console.log(err);
-                        });
+                 _this.$router.push({path:"/frankShow",query:{dataId:data.row.id}})
+                   
 
             },
             change (e) {
-                console.log("sss")
                 if(e == "api"){
                     this.apiShow = false
                     this.nameShow = true
@@ -128,15 +141,12 @@
             },
             nameSearch(e){
             let _this = this
-            console.log(e);
             switch (e) {
                 case "api":
 
                         axios.get('http://192.168.201.60:8080/search/api?api='+this.valueApi,{
                             }).then(function(response){
-                            console.log(response.data.Data)
                             _this.dataApi =JSON.parse(response.data.Data)
-                            console.log(_this.dataName)  
                             })
                             .catch(function(err){
                             console.log(err);
@@ -146,7 +156,6 @@
                         axios.get('http://192.168.201.60:8080/search/project?addr='+this.valueAddrs+'&prj_name='+this.valueName,{
                             }).then(function(response){
                             _this.dataName = JSON.parse(response.data.Data)
-                            console.log(_this.dataApi) 
                             })
                             .catch(function(err){
                             console.log(err);
@@ -175,6 +184,9 @@
         height: 50px;
         line-height: 50px;
         text-align: center
+    }
+    .ivu-table-row{
+        cursor: pointer;
     }
 </style>
 

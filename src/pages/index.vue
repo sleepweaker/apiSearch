@@ -10,14 +10,14 @@
                 </div>
                 
             </div>
-            <Login-Input ref="loginInput" v-bind:loginMessage="message"></Login-Input>
+            <Search-Input ref="loginInput" v-bind:loginMessage="message"></Search-Input>
         </div>
     </div>
 </template>
 
 <script>
 import Vue from 'vue';
-import LoginInput from '../components/LoginInput';
+import SearchInput from '../components/searchInput';
 export default {
    data () {
   	return {    

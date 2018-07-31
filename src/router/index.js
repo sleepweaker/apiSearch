@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/pages/Login'
+import Index from '@/pages/index'
 import Show from '@/pages/Show'
 import FrankShow from '@/pages/frankShow'
 
@@ -10,8 +10,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Login',
-      component: Login
+      name: 'Index',
+      component: Index
     },
     {
       path: '/show',
@@ -21,7 +21,8 @@ export default new Router({
     {
       path: '/frankShow',
       name: 'FrankShow',
-      component: FrankShow
+      component: FrankShow,
+      meta: { keepAlive: true }
     }
   ]
 })
