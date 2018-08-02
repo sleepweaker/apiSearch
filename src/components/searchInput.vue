@@ -28,19 +28,14 @@ export default {
         }
     },
     mounted () {
-
+        
     },
     created:function(){
         let that = this
         document.onkeydown = function(e){
             let type = ""
             if(window.event.keyCode == 13){
-            if(that.isTypeApi==true){
-                type = "api"
-            }else{
-                type = "name"
-            }
-            that.nameSearch(type)
+            that.nameSearch(that.isTypeApi?'api':'name')
         }
         }
     },

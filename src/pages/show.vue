@@ -116,11 +116,7 @@
         document.onkeydown = function(e){
             let type = ""
             if(window.event.keyCode == 13){
-            if(that.apiShow==true){
-                type = "api"
-            }else{
-                type = "name"
-            }
+            that.nameSearch(that.apiShow?'api':'name')
             that.nameSearch(type)
             }
             }

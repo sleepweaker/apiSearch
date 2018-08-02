@@ -1,44 +1,72 @@
 <template>
 <div class="main">
-    <div class="num clear-float">
-    <h1>Desc:</h1>
-    <span>{{this.dataShow.Desc}}</span>
-    </div><div class="num clear-float">
-    <h1>ID:</h1>
-    <span>{{this.dataShow.ID}}</span>
-    </div><div class="num clear-float">
-    <h1>Method:</h1>
-    <span>{{this.dataShow.Method}}</span>
-    </div><div class="num clear-float">
-    <h1>Params:</h1>
-    <div v-for="item in dataShow.Params" class="divFor">
-        <span>Name:{{item.Name}}</span>
-        <span>Desc:{{item.Desc}}</span>
-    </div>
-    </div><div class="num clear-float">
-    <h1>Path:</h1>
-    <span>{{this.dataShow.Path}}</span>
-    </div><div class="num clear-float">
-    <h1>PrjName:</h1>
-    <span>{{this.dataShow.PrjName}}</span>
-    </div><div class="num clear-float">
-    <h1>Querys:</h1>
-    <div v-for="item in dataShow.Querys" class="divFor">
-        <span>Name:{{item.Name}}</span>
-        <span>Desc:{{item.Desc}}</span>
-    </div>
-    </div><div class="num clear-float">
-    <h1>Resp:</h1>
-    <span>Code:{{this.dataResp.code}}</span>
-    <span>Msg:{{this.dataResp.msg}}</span>
-    <span>Data:{{this.dataResp.data}}</span>
-    </div><div class="num clear-float">
-    <h1>SubApis:</h1>
-    <div v-for="item in dataShow.SubApis" class="divFor">
-        Api:<span class="click" @click="apiSearch(item.Api)">{{item.Api}}</span>
-        Method:<span>{{item.Method}}</span>
-    </div>
-    </div>
+    <ol class="clear-float">
+        <li>
+            <h1>
+                Desc:
+            </h1>
+            <span>{{this.dataShow.Desc}}</span>
+        </li>
+        <li>
+            <h1>
+                ID:
+            </h1>
+            <span>{{this.dataShow.Desc}}</span>
+        </li>
+        <li>
+            <h1>
+                Method:
+            </h1>
+            <span>{{this.dataShow.Desc}}</span>
+        </li>
+        <li>
+            <h1>
+                Params:
+            </h1>
+            <div v-for="item in this.dataShow.Params" class="divFor">
+                <span>Name:{{item.Name}}</span>
+                <span>Desc:{{item.Desc}}</span>
+            </div>
+        </li>
+        <li>
+            <h1>
+                Path:
+            </h1>
+            <span>{{this.dataShow.Path}}</span>
+        </li>
+        <li>
+            <h1>
+                PrjName:
+            </h1>
+            <span>{{this.dataShow.PrjName}}</span>
+        </li>
+        <li>
+            <h1>
+                Querys:
+            </h1>
+            <div v-for="item in dataShow.Querys" class="divFor">
+                <span>Name:{{item.Name}}</span>
+                <span>Desc:{{item.Desc}}</span>
+            </div>
+        </li>
+        <li>
+            <h1>
+                Resp:
+            </h1>
+            <h3>Code:{{this.dataResp.code}}</h3>
+            <h3>Msg:{{this.dataResp.msg}}</h3>
+            <h3>Data:{{this.dataResp.data}}</h3 >
+        </li>
+        <li>
+            <h1>
+                SubApis:
+            </h1>
+            <div v-for="item in dataShow.SubApis" class="divFor">
+                Api:<span class="click" @click="apiSearch(item.Api)">{{item.Api}}</span>
+                Method:<span>{{item.Method}}</span>
+            </div>
+        </li>
+    </ol>
 </div>
 </template>
 <script>
@@ -86,40 +114,44 @@ export default {
     }
     .main{
         height: 80%;
+        /* width: 80%;
+        margin: 0 auto; */
         display: -webkit-box;
         -webkit-box-pack:center;
         -webkit-box-align:center;
         -webkit-box-orient: vertical;
         text-align: center
     }
-    label{
-        display: inline-block;
-        font-size: 24px;
-        font-weight: bold;
-        text-align: left;
-    }
     h1{
+        width: 600px;
+        text-align: center;
+    }
+    li{
         float: left;
-        width: 100px;
+        width: 600px;
+        height: 150px;
+        list-style: none;
+        border: 1px solid #e1e4e8;
+        margin-top: 20px;
+        margin-right: 30px;
+    }
+    h3{
         text-align: left;
-    }
-    .num{
-        width: 800px;
-        height: 50px;
-    }
-    .divFor{
-        margin-left: 50px;
-
+        margin-left: 150px;
+        margin-top: 5px;
     }
     span{
-        margin-left: 20px;
+        display: inline-block;
         margin-right: 20px;
-        font-size: 14px;
-        font-weight: normal;
+        font-size: 18px;
+        margin-top: 10px;
     }
     .click{
         cursor: pointer;
         /* color: aqua; */
+    }
+    .divfor{
+        font-size: 18px;
     }
 </style>
 
