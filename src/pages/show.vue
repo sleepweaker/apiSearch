@@ -6,7 +6,7 @@
                 API
                 </Col>
                 <Col span="18">
-                <Input v-model="valueApi" size="large" placeholder="输入项目API" style="width: 480px;float:left"/>
+                <Input v-model="valueApi" size="large" placeholder="输入项目API" style="width: 480px;float:left" @keydown.enter.native="nameSearch('api')"/>
                 </Col>
                 <Col span="3">
                 <Button type="primary" icon="ios-search" id="api" @click="nameSearch($event.currentTarget.id)" >Search</Button>
@@ -17,8 +17,8 @@
                 Name
                 </Col>
                 <Col span="18">
-                 <Input v-model="valueName" size="large" placeholder="项目名称" style="width: 150px;float:left"/>
-                <Input v-model="valueAddrs" size="large" placeholder="地址" style="width: 330px;float:left;"/>
+                 <Input v-model="valueName" size="large" placeholder="项目名称" style="width: 150px;float:left" @keyup.enter.native="nameSearch('name')"/>
+                <Input v-model="valueAddrs" size="large" placeholder="地址" style="width: 330px;float:left;" @keyup.enter.native="nameSearch('name')"/>
                 </Col>
                 <Col span="3">
                 <Button type="primary" icon="ios-search" id="name" @click="nameSearch($event.currentTarget.id)">Search</Button>
@@ -40,17 +40,6 @@
                 apiShow:false,
                 nameShow:false,
                 columnsApi: [
-                    // {
-                    //     type: 'expand',
-                    //     width: 50,
-                    //     render: (h, params) => {
-                    //         return h(expandRow, {
-                    //             props: {
-                    //                 row: params.row
-                    //             },
-                    //         })
-                    //     }
-                    // },
                     {
                         title: 'addr',
                         key: 'addr',
@@ -122,6 +111,20 @@
                 this.nameSearch("name")
             }
         },
+        created:function(){
+        let that = this
+        document.onkeydown = function(e){
+            let type = ""
+            if(window.event.keyCode == 13){
+            if(that.apiShow==true){
+                type = "api"
+            }else{
+                type = "name"
+            }
+            that.nameSearch(type)
+            }
+            }
+        },
         methods:{
             rowClick (data) {
                 console.log(data)
@@ -144,7 +147,7 @@
             switch (e) {
                 case "api":
 
-                        axios.get('http://192.168.201.60:8080/search/api?api='+this.valueApi,{
+                        axios.get('http://frank.onenet.com/search/api?api='+this.valueApi,{
                             }).then(function(response){
                             _this.dataApi =JSON.parse(response.data.Data)
                             })
@@ -153,7 +156,7 @@
                         });
                     break;
                 case "name":
-                        axios.get('http://192.168.201.60:8080/search/project?addr='+this.valueAddrs+'&prj_name='+this.valueName,{
+                        axios.get('http://frank.onenet.com/search/project?addr='+this.valueAddrs+'&prj_name='+this.valueName,{
                             }).then(function(response){
                             _this.dataName = JSON.parse(response.data.Data)
                             })

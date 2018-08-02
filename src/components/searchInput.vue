@@ -2,13 +2,13 @@
     <div class="login-in" ref="oneNet">
 
         <div class="username-in clear-float" v-if="isTypeApi">
-                <Input v-model="valueApi" size="large" placeholder="输入项目API" style="width: 480px;float:left"/>
+                <Input v-model="valueApi" size="large" placeholder="输入项目API" style="width: 480px;float:left" />
                 <Button type="primary" icon="ios-search" id="api" style="float:left;margin-left:20px;width:100px" @click="nameSearch($event.currentTarget.id)">Search</Button>
         </div>
         <div class="username-in  clear-float" v-if="isTypeName">
-                <Input v-model="valueName" size="large" placeholder="项目名称" style="width: 150px;float:left"/>
-                <Input v-model="valueAddrs" size="large" placeholder="地址" style="width: 330px;float:left;"/>
-                    <Button type="primary" icon="ios-search" id="name" style="float:left;margin-left:20px" @click="nameSearch($event.currentTarget.id)">Search</Button>
+                <Input v-model="valueName" size="large" placeholder="项目名称" style="width: 150px;float:left" />
+                <Input v-model="valueAddrs" size="large" placeholder="地址" style="width: 330px;float:left;" />
+                <Button type="primary" icon="ios-search" id="name" style="float:left;margin-left:20px" @click="nameSearch($event.currentTarget.id)">Search</Button>
         </div>  
     </div>
 </template>
@@ -28,7 +28,21 @@ export default {
         }
     },
     mounted () {
-        
+
+    },
+    created:function(){
+        let that = this
+        document.onkeydown = function(e){
+            let type = ""
+            if(window.event.keyCode == 13){
+            if(that.isTypeApi==true){
+                type = "api"
+            }else{
+                type = "name"
+            }
+            that.nameSearch(type)
+        }
+        }
     },
     watch:{
       'loginMessage' : function(){

@@ -56,7 +56,7 @@ export default {
             let _this = this;
             let id = this.$route.query.dataId
             
-            axios.get('http://192.168.201.60:8080/frank-api?id='+id,{
+            axios.get('http://frank.onenet.com/frank-api?id='+id,{
                 }).then(function(response){
                 _this.dataShow= JSON.parse(response.data.Data);
                 _this.dataResp=JSON.parse(_this.dataShow.Resp)

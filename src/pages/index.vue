@@ -8,9 +8,8 @@
                     <h2 class="login-onenet" v-bind:class="{onenetactive:oneIsActive}" @click="cleanHover($event.target.id)" id="oneNet" ref="one">API</h2>
                     <h2 class="login-heport" v-bind:class="{heportactive:heIsActive}" @click="cleanHover($event.target.id)" id="hePort" ref="port">项目名字</h2>
                 </div>
-                
             </div>
-            <Search-Input ref="loginInput" v-bind:loginMessage="message"></Search-Input>
+            <Search-Input ref="SearchInput" v-bind:loginMessage="message"></Search-Input>
         </div>
     </div>
 </template>
@@ -63,7 +62,7 @@ export default {
     },
   },
   components: {
-      LoginInput
+      SearchInput
   }
 }
 
