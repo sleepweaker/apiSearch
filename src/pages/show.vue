@@ -1,11 +1,13 @@
 <template>
-    <div class="">
+    <div class="show">
         <div class="searchIn">
             <Row v-if="apiShow">
-                <Col span="3" class="serachInChange" @click.native="change('api')">
-                API
+                <Col span="4" class="serachInChange clear-float" @click.native="change('api')">
+                <h3>API</h3>
+                <img src="../assets/change.png">
+                <p>NAME</p>
                 </Col>
-                <Col span="18">
+                <Col span="17">
                 <Input v-model="valueApi" size="large" placeholder="输入项目API" style="width: 480px;float:left" @keydown.enter.native="nameSearch('api')"/>
                 </Col>
                 <Col span="3">
@@ -13,10 +15,12 @@
                 </Col>
             </Row>
             <Row v-if="nameShow">
-                <Col span="3" class="serachInChange" @click.native="change('name')">
-                Name
+                <Col span="4" class="serachInChange" @click.native="change('name')">
+                <h3>NAME</h3>
+                <img src="../assets/change.png">
+                <p>API</p>
                 </Col>
-                <Col span="18">
+                <Col span="17">
                  <Input v-model="valueName" size="large" placeholder="项目名称" style="width: 120px;float:left" @keyup.enter.native="nameSearch('name')"/>
                 <Input v-model="valueAddrs" size="large" placeholder="地址" style="width: 300px;float:left;" @keyup.enter.native="nameSearch('name')"/>
                 </Col>
@@ -41,12 +45,12 @@
                 nameShow:false,
                 columnsApi: [
                     {
-                        title: 'branch',
+                        title: '分支',
                         key: 'branch',
                         width:150,
                     },
                     {
-                        title: 'method',
+                        title: '请求方式',
                         key: 'method',
                         width:180,
                            render: (h, params) => {
@@ -109,11 +113,11 @@
                     },
 
                     {
-                        title: 'desc',
+                        title: '描述',
                         key: 'desc'
                     },
                     {
-                        title: 'path',
+                        title: '地址',
                         key: 'path'
                     },
                     {
@@ -156,15 +160,19 @@
                 ],
                 columnsName: [
                     {
-                        title: 'name',
+                        title: '项目名',
                         key: 'name'
+                    },
+                    {
+                        title: '分支',
+                        key: 'branch'
                     },
                     {
                         title: 'scheme',
                         key: 'scheme'
                     },
                     {
-                        title: 'addr',
+                        title: '地址',
                         key: 'addr'
                     },
                     
@@ -223,7 +231,7 @@
             let _this = this
             switch (e) {
                 case "api":
-                        axios.get('http://frank.onenet.com/search/api?api='+this.valueApi,{
+                        axios.get('http://frank.onenet.com/search/api?api='+this.valueApi+'&branch=',{
                             }).then(function(response){
                             _this.dataApi =JSON.parse(response.data.data)
                             console.log(_this.dataApi)
@@ -249,19 +257,46 @@
     }
 </script>
 <style >
+body{
+    background-color: #e1e1e1
+}
+    .show{
+        width: 1250px;
+       margin: 0 auto;
+       height: 100%;
+       background-color: #fff;
+    }
     .searchIn{
-        width:40%;
-        margin-top: 20px;
+        /* width:100%; */
+        padding-top: 20px;
+        padding-bottom: 30px;
+        box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1), 0 1px rgba(0,0,0,0.1);
+    }
+    .searchIn h3,img,p{
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        float: left;
+    }
+    .searchIn p{
+        font-size: 5px;
+        line-height: 60px;
+    }
+    .searchIn h3{
+        width: 60px;
+        line-height: 50px;
     }
     .serachInChange{
+        /* width: 200px; */
         text-align: center;
         height: 32px;
         line-height: 32px;
         font-size: 18px;
         cursor: pointer;
+        padding-left: 20px;
     }
     /* .searchShow{
-       width: 1050px;
+       width: 1250px;
        margin: 0 auto;
     } */
     .showTitle Col{

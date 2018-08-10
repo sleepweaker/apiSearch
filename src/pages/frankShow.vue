@@ -2,73 +2,9 @@
 <div>
 <div class="head clear-float">
         <img @click="to" src="../assets/login-log.png">
+        <h1 @click="toSearch" >搜索列表</h1>
     </div>
 <div class="main">
-    <!-- <ol class="clear-float">
-        <li>
-            <h1>
-                Desc:
-            </h1>
-            <span>{{this.dataShow.Desc}}</span>
-        </li>
-        <li>
-            <h1>
-                ID:
-            </h1>
-            <span>{{this.dataShow.ID}}</span>
-        </li>
-        <li>
-            <h1>
-                Method:
-            </h1>
-            <span>{{this.dataShow.Method}}</span>
-        </li>
-        <li>
-            <h1>
-                Params:
-            </h1>
-            <div v-for="item in this.dataShow.Params" class="divFor">
-                <span>Name:{{item.Name}}</span>
-                <span>Desc:{{item.Desc}}</span>
-            </div>
-        </li> 
-        <li>
-            <h1>
-                Path:
-            </h1>
-            <span>{{this.dataShow.Path}}</span>
-        </li>
-        <li>
-            <h1>
-                PrjName:
-            </h1>
-            <span>{{this.dataShow.PrjName}}</span>
-        </li>
-        <li>
-            <h1>
-                Querys:
-            </h1>
-            <div v-for="item in dataShow.Querys" class="divFor">
-                <span>Name:{{item.Name}}</span>
-                <span>Desc:{{item.Desc}}</span>
-            </div>
-        </li>
-        <li>
-            <h1>
-                Resp:
-            </h1>
-            <span>{{this.dataShow.Resp}}</span>
-        </li>
-        <li>
-            <h1>
-                SubApis:
-            </h1>
-            <div v-for="item in dataShow.SubApis" class="divFor">
-                Api:<span class="click" @click="apiSearch(item.Api)">{{item.Api}}</span>
-                Method:<span>{{item.Method}}</span>
-            </div>
-        </li>
-    </ol> -->
     <div class="main-color">
     <div class="prjname clear-float">
         <h1 class="fontcolor">项目名：{{this.dataShow.prj_name}}</h1>
@@ -85,7 +21,7 @@
             </div>
         </div> -->
     </div>
-    <div class="id-resp clear-float">
+    <!-- <div class="id-resp clear-float"> -->
     <div class="ID">
         <div class="IDtitle clear-float">
             <p class="method">Method</p>
@@ -97,10 +33,12 @@
         </div>
     </div>
     <div class="Resp">
-        <p class="Resptitle">响应:</p>
-        <pre class="Respmessage">{{this.dataShow.resp}}</pre>
+        <h2 class="Resptitle">响应:</h2>
+        <div v-for="(item,index) in this.respData" class="clear-float">
+             <Resp-Show ref="resp" :item="item"></Resp-Show>
+        </div>
     </div>
-    </div>
+    <!-- </div> -->
     <div class="header-query clear-float">
     <div class="Params">
         <h2>请求头:</h2>
@@ -116,8 +54,8 @@
     <div class="Querys">
         <h2>URL参数:</h2>
         <div class="Querystitle clear-float">
-            <p>参数Name</p>
-            <p>参数Desc</p>
+            <p>参数名</p>
+            <p>参数描述</p>
         </div>
         <div v-for="item in this.dataShow.querys" class="Querysmessage clear-float">
             <p>{{item.name}}</p>
@@ -129,8 +67,8 @@
     <div class="Body">
         <h2>请求体:</h2>
         <div class="Bodytitle clear-float">
-            <p>参数Name</p>
-            <p>参数Desc</p>
+            <p>参数名</p>
+            <p>参数描述</p>
         </div>
         <div v-for="item in this.dataShow.body" class="Bodymessage clear-float">
             <div class="body-and clear-float" style="height=100%">
@@ -173,16 +111,21 @@
 </template>
 <script>
  import axios from 'axios'
-
+ import RespShow from '../components/respShow';
 export default {
     data(){
         return {
             includedComponents: "test-keep-alive",
             dataShow:"",
             dataResp:"",
+            // test2:"安徽附件是看能否大家好广佛iu扼腕部分尽快发NSA客服呢哇妇女金额为诺福克三分科三废物那帮弗兰克娃儿那个坑哦呢就跟别人你刚来咯不过",
+            resvalue:true,
+            respData:[],
             jsonData:[],
+            
+            // test1:{"code":0, "msg":"success", "msg1":"success","msg2":"success","msg3":{"code":0, "msg":"success", "msg1":"success","msg2":"success","msg3":"success","msg4":"success","msg5":"success","msg6":"success","msg7":"success","msg8":"success","msg9":"success","msg0":"success","msg11":"success","data":""},"msg4":"success","msg5":"success","msg6":"success","msg7":"success","msg8":"success","msg9":"success","msg0":"success","msg11":"success","data":""},
         }
-    },
+    },  
     mounted(){
             let _this = this;
             let id = this.$route.query.dataId
@@ -191,7 +134,11 @@ export default {
                 _this.dataShow= JSON.parse(response.data.data);
                 _this.$refs.descTitle.title = _this.dataShow.desc;
                 _this.dataShow.body.forEach(_this.jsonCheck);
-                _this.dataShow.resp = JSON.stringify(JSON.parse(_this.dataShow.resp), null, 4);
+                // _this.dataShow.resp="["+_this.dataShow.resp+"]";
+                // console.log(_this.dataShow.resp.length)
+                _this.respCheck(_this.dataShow.resp);
+                // _this.dataShow.resp = JSON.stringify(JSON.parse(_this.dataShow.resp), null, 4);
+                
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -202,17 +149,43 @@ export default {
             this.$router.push({path:"/show",query:{data:e,type:"api"}})
         },
         to(){
+            this.$router.push({path:"/"})
+        },
+        toSearch(){
             this.$router.push({path:"/show",query:{type:"api"}})
         },
         jsonCheck(e){
             if(e.name == "*json*"){
                 this.jsonData.push(JSON.stringify(JSON.parse(e.desc), null, 4))
                 this.dataShow.body.splice(this.dataShow.body.indexOf(e),1)
-                console.log(this.dataShow.body) 
+            }
+        },
+
+        respCheck(e){
+            let i = 0;
+            let str = "";
+            for (let index = 0; index < e.length; index++) {
+                if (e[index] =="{") {
+                    i++;
+
+                }else if(e[index] == "}"){
+                    i--;
+                }
+                str = str + e[index]
+                if (i == 0) {
+                    this.respData.push(JSON.stringify(JSON.parse(str), null, 4))
+                    str = "";
+                    console.log(this.respData)
+                }
             }
         }
-    }
+    },
+      components: {
+      RespShow
+  }
+    
 }
+
 </script>
 <style scoped>
     .clear-float:after{
@@ -228,6 +201,12 @@ export default {
     body{
         background-color: #fdfcf8;
     }
+    p{
+        height: auto;
+        word-wrap:break-word;
+        word-break:break-all;
+        overflow: hidden;
+    }
     .head{
         width: 100%;
         padding-left: 50px;
@@ -238,6 +217,15 @@ export default {
         float: left;
         width: 150px;
         cursor: pointer;
+    }
+    .head h1{
+        float: left;
+        height: 67.5px;
+        /* width: 20%; */
+        text-align: center;
+        line-height: 67.5px;
+        cursor: pointer;
+        margin-left: 50px;
     }
     .main{
         padding-top: 20px;
@@ -292,7 +280,7 @@ export default {
         word-wrap: break-word;
         word-break: break-all;
     }
-    .author{
+    /* .author{
         float: right;
         height: 100px;
     }
@@ -300,7 +288,7 @@ export default {
     }
     .authorMessage p{
         margin-left: 10px;
-    }
+    } */
     .id-resp{
         width: 90%;
         padding-top: 40px;
@@ -309,8 +297,10 @@ export default {
         border-bottom: 1px solid #aaa;
     }
     .ID{
-        float: left;
-        width: 40%;
+        width: 90%;
+        padding-top: 40px;
+        margin: 0 auto;
+        padding-bottom: 40px;
     }
     .IDtitle{
         background-color: #3F3F3F;
@@ -330,19 +320,29 @@ export default {
         font-size: 18px
     }
     .Resp{
-        float: right;
-        width: 40%;
+        width: 90%;
+        padding-top: 40px;
+        margin: 0 auto;
+        padding-bottom: 40px;
     }
     .Resp p{
         font-size: 18px;
     }
     .Resptitle{
         text-align: left;
+        font-size: 18px;
     }
     .Respmessage{
-        height: 85px;
+        /* height: 85px; */
         padding-left: 10px;
         text-align: left;
+    }
+    .resphi{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-wrap: break-word;
+        word-break: break-all;
     }
     .header-query{
         width: 90%;
@@ -480,6 +480,14 @@ export default {
     .json-show{
         text-align: left;
         border: 1px solid #aaa;
+    }
+    .open{
+        display: inline-block;
+        width: 22px;
+        font-size: 14px;
+        cursor: pointer;
+        color: #fff;
+        background-color: aquamarine
     }
 </style>
 
