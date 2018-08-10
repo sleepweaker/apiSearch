@@ -3,9 +3,9 @@
         <div class="searchIn">
             <Row v-if="apiShow">
                 <Col span="4" class="serachInChange clear-float" @click.native="change('api')">
-                <h3>API</h3>
+                <h3 class="h3">API</h3>
                 <img src="../assets/change.png">
-                <p>NAME</p>
+                <p class="small">NAME</p>
                 </Col>
                 <Col span="17">
                 <Input v-model="valueApi" size="large" placeholder="输入项目API" style="width: 480px;float:left" @keydown.enter.native="nameSearch('api')"/>
@@ -16,9 +16,9 @@
             </Row>
             <Row v-if="nameShow">
                 <Col span="4" class="serachInChange" @click.native="change('name')">
-                <h3>NAME</h3>
+                <h3 class="h3">NAME</h3>
                 <img src="../assets/change.png">
-                <p>API</p>
+                <p class="small">API</p>
                 </Col>
                 <Col span="17">
                  <Input v-model="valueName" size="large" placeholder="项目名称" style="width: 120px;float:left" @keyup.enter.native="nameSearch('name')"/>
@@ -62,9 +62,9 @@
                                     'class':{
                                         [params.row.method]:true,
                                     },
-                                    style:{
-                                        display:'block',
-                                    },
+                                    // style:{
+                                    //     display:'block',
+                                    // },
                                 },params.row.method)
                            },
                         filters: [
@@ -256,7 +256,7 @@
         }
     }
 </script>
-<style >
+<style>
 body{
     background-color: #e1e1e1
 }
@@ -272,19 +272,26 @@ body{
         padding-bottom: 30px;
         box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1), 0 1px rgba(0,0,0,0.1);
     }
-    .searchIn h3,img,p{
+    .searchIn img{
         display: inline-block;
         width: 50px;
         height: 50px;
         float: left;
     }
-    .searchIn p{
+    .searchIn .small{
         font-size: 5px;
         line-height: 60px;
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        float: left;
     }
-    .searchIn h3{
+    .searchIn .h3{
         width: 60px;
         line-height: 50px;
+        display: inline-block;
+        height: 50px;
+        float: left;
     }
     .serachInChange{
         /* width: 200px; */
