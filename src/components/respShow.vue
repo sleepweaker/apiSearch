@@ -1,7 +1,8 @@
 <template id="list-item">
-<div>    <div class="open" @click="openShow">{{openValue}}</div>
-    <pre class="Respmessage" :class="{resphi:isActive}" ref="respMessage">{{item}}</pre></div>
-
+<div>    
+    <div class="open" @click="openShow">{{openValue}}</div>
+    <pre class="Respmessage" :class="{resphi:isActive}" ref="respMessage">{{item}}</pre>
+</div>
 </template>
 <script>
 export default {
@@ -31,7 +32,7 @@ export default {
     .open{
         float: right;
         width: 22px;
-        font-size: 14px;
+        font-size: 18px;
         cursor: pointer;
         color: #fff;
         background-color: #3F3F3F
@@ -40,6 +41,8 @@ export default {
         /* height: 85px; */
         padding-left: 10px;
         text-align: left;
+        overflow-y:auto;
+        overflow-x:auto;
     }
     .resphi{
         white-space: nowrap;

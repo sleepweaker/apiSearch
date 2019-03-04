@@ -5,8 +5,8 @@
             </div>
             <div class="index-login-main-center">
                 <div class="login-chioce clear-float">
-                    <h2 class="login-onenet" v-bind:class="{onenetactive:oneIsActive}" @click="cleanHover($event.target.id)" id="oneNet" ref="one">API</h2>
-                    <h2 class="login-heport" v-bind:class="{heportactive:heIsActive}" @click="cleanHover($event.target.id)" id="hePort" ref="port">项目名字</h2>
+                    <h2 class="login-onenet" v-bind:class="{onenetactive:oneIsActive}" @click="cleanHover(true)" ref="one">API</h2>
+                    <h2 class="login-heport" v-bind:class="{heportactive:heIsActive}" @click="cleanHover(false)" id="hePort" ref="port">项目名字</h2>
                 </div>
             </div>
             <Search-Input ref="SearchInput" v-bind:loginMessage="message"></Search-Input>
@@ -20,45 +20,26 @@ import SearchInput from '../components/searchInput';
 export default {
    data () {
   	return {    
-        portNow:"oneNet",
+        portNow:true,
         oneIsActive:false,
-        heIsActive:false,
-        message:"API",
+        heIsActive:false, 
+        message:true,
   	}
   },
   mounted () {
-    this.init();
   },
   methods:{
-    init() {
-
-    },
     cleanHover(e){
-        switch (e) {
-            case "oneNet":
-                if(e==this.portNow){    
-                }else{
-                    this.oneIsActive = false;
-                    this.heIsActive = false;
-                    this.portNow = "oneNet";
-                    this.message = "Api"
-                    //这个方法目前有个问题，子组件无法及时改变值
-                    // this.$refs.loginInput.valueChange();
-                }
-                break;
-            case "hePort":
-                if(e==this.portNow){    
-                }else{
-                    this.oneIsActive = true;
-                    this.heIsActive = true;
-                    this.portNow = "hePort";
-                    this.message = "Name";
-                    // this.$refs.loginInput.valueChange();
-                }
-                break;
-            default:
-                break;
+        if(e==this.portNow){    
+        }else{
+            this.oneIsActive = !this.oneIsActive;
+            this.heIsActive = !this.heIsActive;
+            this.portNow = !this.portNow;
+            this.message = !this.message
+            //这个方法目前有个问题，子组件无法及时改变值
+            // this.$refs.loginInput.valueChange();
         }
+               
     },
   },
   components: {

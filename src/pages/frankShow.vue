@@ -2,18 +2,18 @@
 <div>
 <div class="head clear-float">
         <img @click="to" src="../assets/login-log.png">
-        <h1 @click="toSearch" >搜索列表</h1>
     </div>
 <div class="main">
-    <div class="main-color">
+    <div class="main-color clear-float">
     <div class="prjname clear-float">
         <h1 class="fontcolor">项目名：{{this.dataShow.prj_name}}</h1>
-        <p class="branch">分支:{{this.dataShow.branch}}</p>
+        
     </div>
     
     <div class="desc fontcolor clear-float">
         <p class="title">接口描述：</p>
         <p class="message" ref="descTitle" title=''>{{this.dataShow.desc}}</p>
+        <h4 class="branch">分支:{{this.dataShow.branch}}</h4>
         <!-- <div class="author clear-float">
             <div v-for="item in this.dataShow.authors" class="authorMessage">
                 <p>{{item.name}}</p>
@@ -21,6 +21,24 @@
             </div>
         </div> -->
     </div>
+    <div class="clear-float" style="width:90%;margin:0 auto;">
+        <Button type="primary" style="margin-top:10px;margin-bottom:10px;float:right" @click="mockQuerry">MOCK地址&nbsp&nbsp{{mockName}}</Button>
+    </div>
+        <div class="mock" v-if="mockShow">
+            <div class="mocktitle clear-float">
+                <p class="mockmethod">Method</p>
+                <p class="mockpath">Mock地址</p>
+                <p class="mockaction">action</p>
+            </div>
+            <div v-for="(item,index) in this.mockData" class="mockmessage clear-float">
+                <p class="mockmethod" style="color:#515a6e;float:none">{{dataShow.method}}</p>
+                <p class="mockpath" style="color:#515a6e;float:none;word-wrap:break-word">{{item}}</p>
+                <div class="mockaction" style="border: 1px solid #aaa;float:none">
+                    <Button type="primary" v-bind:id='index' v-bind:data-clipboard-text="item" @click="mockCopy(index)">复制</Button>
+                </div>
+            </div>
+        </div>
+    
     <!-- <div class="id-resp clear-float"> -->
     <div class="ID">
         <div class="IDtitle clear-float">
@@ -28,13 +46,13 @@
             <p style="width:70%">Path</p>
         </div>
         <div class="IDmessage clear-float">
-            <p class="method">{{this.dataShow.method}}</p>
-            <p style="width:70%">{{this.dataShow.path}}</p>
+            <p class="method scroll">{{this.dataShow.method}}</p>
+            <p class="seven scroll">{{this.dataShow.path}}</p>
         </div>
     </div>
     <div class="Resp">
         <h2 class="Resptitle">响应:</h2>
-        <div v-for="(item,index) in this.respData" class="clear-float">
+        <div v-for="(item,index) in this.respData" class=" clear-float">
              <Resp-Show ref="resp" :item="item"></Resp-Show>
         </div>
     </div>
@@ -47,33 +65,60 @@
             <p>val</p>
         </div>
         <div v-for="item in this.dataShow.headers" class="Paramsmessage clear-float">
-            <p>{{item.key}}</p>
-            <p>{{item.val}}</p>
+            <p class="scroll">{{item.key}}</p>
+            <p class="scroll">{{item.val}}</p>
+        </div>
+        <p class="oldtitle" title="曾用请求头" v-if="this.fadHeaders">？</p>
+        <div v-for="item in this.fad.headers" class="Paramsmessageold clear-float">
+            <p class="scroll">{{item.key}}</p>
+            <p class="scroll">{{item.val}}</p>
         </div>
     </div>
-    <div class="Querys">
+        <div class="Authors">
+        <h2>负责人:</h2>
+        <div class="SubApistitle clear-float">
+            <p class="method">姓名：</p>
+            <p class="click">邮箱:</p>
+        </div>  
+        
+        <div v-for="item in this.dataShow.authors" class="SubApismessage clear-float">
+            <p class="method scroll">{{item.name}}</p>
+            <p class="click scroll">{{item.mail}}</p>
+        </div>
+        <p class="oldtitle" title="曾经负责，但现在已不再负责" v-if="this.fadAuthors">？</p>
+        <div v-for="item in this.fad.authors" class="SubApismessageto old clear-float">
+            <p class="method scroll">{{item.name}}</p>
+            <p class="click scroll">{{item.mail}}</p>
+        </div>
+    </div>
+    </div>
+       <div class="Querys">
         <h2>URL参数:</h2>
         <div class="Querystitle clear-float">
-            <p>参数名</p>
-            <p>参数描述</p>
+            <p class="three">参数名</p>
+            <p class="seven">参数描述</p>
+            
         </div>
         <div v-for="item in this.dataShow.querys" class="Querysmessage clear-float">
-            <p>{{item.name}}</p>
-            <p>{{item.desc}}</p>
+            <p class="three test">{{item.name}}</p>
+            <p class="seven" style="word-wrap:break-word">{{item.desc}}</p>
+        </div>
+        <p class="oldtitle" title="曾用URL参数" v-if="this.fadQuerys">？</p>
+        <div v-for="item in this.fad.querys" class="Querysmessageto old clear-float">
+            <p class="three test">{{item.name}}</p>
+            <p class="seven " style="word-wrap:break-word">{{item.desc}}</p>
         </div>
     </div>
-    </div>
-    
     <div class="Body">
         <h2>请求体:</h2>
         <div class="Bodytitle clear-float">
-            <p>参数名</p>
-            <p>参数描述</p>
+            <p class="three">参数名</p>
+            <p class="seven">参数描述</p>
         </div>
         <div v-for="item in this.dataShow.body" class="Bodymessage clear-float">
             <div class="body-and clear-float" style="height=100%">
-            <p class="p">{{item.name}}</p>
-            <p  class="p">{{item.desc}}</p>
+            <p class=" three">{{item.name}}</p>
+            <p  class=" seven">{{item.desc}}</p>
             </div>
         </div>
         <div  class="json-show">
@@ -82,18 +127,21 @@
                 <pre>{{item}}</pre>
             </div>
         </div>
-    </div>
-    <div class="SubApis">
-        <h2>负责人:</h2>
-        <div class="SubApistitle clear-float">
-            <p class="method">姓名：</p>
-            <p class="click">邮箱:</p>
+        <p class="oldtitle" title="曾用请求体" v-if="this.fadBody">？</p>
+        <div v-for="item in this.fad.body" class="Bodymessageto old clear-float">
+            <div class=" old clear-float" style="height=100%">
+            <p class=" three">{{item.name}}</p>
+            <p  class=" seven">{{item.desc}}</p>
+            </div>
         </div>
-        <div v-for="item in this.dataShow.authors" class="SubApismessage clear-float">
-            <p class="method">{{item.name}}</p>
-            <p class="click">{{item.mail}}</p>
+        <div  class="json-old" v-if="this.fadJsonData.length">
+            <h3>JSON请求体：</h3>
+            <div v-for="item in this.fadJsonData">
+                <pre class="">{{item}}</pre>
+            </div>
         </div>
     </div>
+
     <div class="SubApis">
         <h2>依赖接口:</h2>
         <div class="SubApistitle clear-float">
@@ -101,8 +149,13 @@
             <p class="method">Method</p>
         </div>
         <div v-for="item in this.dataShow.sub_apis" class="SubApismessage clear-float">
-            <p class="click" @click="apiSearch(item.api)">{{item.api}}</p>
-            <p class="method">{{item.method}}</p>
+            <p class="click scroll" @click="apiSearch(item.api)">{{item.api}}</p>
+            <p class="method scroll">{{item.method}}</p>
+        </div>
+        <p class="oldtitle" title="曾用下游接口" v-if="this.fadSub">？</p>
+        <div v-for="item in this.fad.sub_apis" class="SubApismessageto old clear-float">
+            <p class="click scroll" @click="apiSearch(item.api)">{{item.api}}</p>
+            <p class="method scroll">{{item.method}}</p>
         </div>
     </div>
 </div>
@@ -110,6 +163,7 @@
 </div>
 </template>
 <script>
+ import Clipboard from 'clipboard';
  import axios from 'axios'
  import RespShow from '../components/respShow';
 export default {
@@ -118,30 +172,64 @@ export default {
             includedComponents: "test-keep-alive",
             dataShow:"",
             dataResp:"",
-            // test2:"安徽附件是看能否大家好广佛iu扼腕部分尽快发NSA客服呢哇妇女金额为诺福克三分科三废物那帮弗兰克娃儿那个坑哦呢就跟别人你刚来咯不过",
             resvalue:true,
             respData:[],
             jsonData:[],
-            
-            // test1:{"code":0, "msg":"success", "msg1":"success","msg2":"success","msg3":{"code":0, "msg":"success", "msg1":"success","msg2":"success","msg3":"success","msg4":"success","msg5":"success","msg6":"success","msg7":"success","msg8":"success","msg9":"success","msg0":"success","msg11":"success","data":""},"msg4":"success","msg5":"success","msg6":"success","msg7":"success","msg8":"success","msg9":"success","msg0":"success","msg11":"success","data":""},
+            fad:[],
+            fadAuthors:'',
+            fadBody:'',
+            fadSub:'',
+            fadQuerys:'',
+            fadHeaders:'',
+            fadJsonData:[],
+            strs:'',
+            mockShow:false,
+            mockData:[],
+            copyBtn:null,
+            mockName:"十"
         }
     },  
     mounted(){
             let _this = this;
             let id = this.$route.query.dataId
-            axios.get('http://frank.onenet.com/frank-api?id='+id,{
-                }).then(function(response){
+            if(this.$route.query.datapId){
+                axios.get('http://frank.onenet.com/frank-api?id='+_this.$route.query.datapId).then(function(response){
+                    // console.log(JSON.parse(response.data.data)[_this.$route.query.dataIndex])
                 _this.dataShow= JSON.parse(response.data.data);
                 _this.$refs.descTitle.title = _this.dataShow.desc;
+                _this.fad = _this.dataShow.fad;
                 _this.dataShow.body.forEach(_this.jsonCheck);
+                _this.dataShow.fad.body.forEach(_this.fadJsonCheck);
                 // _this.dataShow.resp="["+_this.dataShow.resp+"]";
-                // console.log(_this.dataShow.resp.length)
+                
+                _this.fadAuthors = !!_this.fad.authors.length;
+                _this.fadBody = !!_this.fad.body.length;
+                _this.fadSub = !!_this.fad.sub_apis.length;
+                _this.fadQuerys = !!_this.fad.querys.length;
+                _this.fadHeaders = !!_this.fad.headers.length;
                 _this.respCheck(_this.dataShow.resp);
                 // _this.dataShow.resp = JSON.stringify(JSON.parse(_this.dataShow.resp), null, 4);
                 
                 }).catch(function(err){
                     console.log(err);
                 });
+            }else if(id!=undefined){
+                axios.get('http://frank.onenet.com/frank-api?id='+id,{
+                }).then(function(response){
+                _this.dataShow= JSON.parse(response.data.data);
+                _this.$refs.descTitle.title = _this.dataShow.desc;
+                _this.dataShow.body.forEach(_this.jsonCheck);
+                _this.respCheck(_this.dataShow.resp);
+                // _this.dataShow.resp = JSON.stringify(JSON.parse(_this.dataShow.resp), null, 4);
+                
+                }).catch(function(err){
+                    console.log(err);
+                });
+            }
+        },
+        updated(){
+            let btns = document.querySelectorAll('Button');
+            this.copyBtn = new Clipboard(btns);
         },
     methods:{
         apiSearch(e){
@@ -151,33 +239,70 @@ export default {
         to(){
             this.$router.push({path:"/"})
         },
-        toSearch(){
-            this.$router.push({path:"/show",query:{type:"api"}})
-        },
-        jsonCheck(e){
+
+        jsonCheck(e,name){
             if(e.name == "*json*"){
                 this.jsonData.push(JSON.stringify(JSON.parse(e.desc), null, 4))
                 this.dataShow.body.splice(this.dataShow.body.indexOf(e),1)
             }
         },
-
+        fadJsonCheck(e,name){
+            
+            if(e.name == "*json*"){
+                this.fadJsonData.push(JSON.stringify(JSON.parse(e.desc), null, 4))
+                this.dataShow.fad.body.splice(this.dataShow.fad.body.indexOf(e),1)
+            }
+        },
         respCheck(e){
             let i = 0;
             let str = "";
             for (let index = 0; index < e.length; index++) {
                 if (e[index] =="{") {
                     i++;
-
                 }else if(e[index] == "}"){
                     i--;
                 }
                 str = str + e[index]
                 if (i == 0) {
-                    this.respData.push(JSON.stringify(JSON.parse(str), null, 4))
+                    try {
+                        this.respData.push(JSON.stringify(JSON.parse(str), null, 4))
+                    } catch (error) {
+                        this.respData.push(str)
+                    }
+                    
                     str = "";
-                    console.log(this.respData)
+                    // console.log(this.respData)
                 }
             }
+        },
+        mockQuerry(){
+            let _this = this
+            if (_this.mockShow == true) {
+                _this.mockShow = !_this.mockShow;
+                _this.mockName = "十" 
+            }else if(_this.mockData==""){
+                axios.get(Host+"/mock/url?api_id="+this.dataShow.id).then(function(response){
+                if (response.data.code!=0) {
+                    alert("无MOCK接口地址");
+                }else{
+                    _this.mockShow = !_this.mockShow;
+                    _this.mockName = "一";
+                    _this.mockData = JSON.parse(response.data.data)
+                    // _this.mockData = ["sdkjgfnakjgnkjerageranglkjaenfklnfm;lewngfkerwnglkanglksangddsgfadjgnnrkjdgnlkdagnvkadgnewaljngflksadnglkdsngvl","那附近科比嘎机阿尔堡肯付货款是念佛i九二南风化工IKEA就是看不惯科萨的"]
+                }
+            })
+            }else{
+               _this.mockShow = !_this.mockShow; 
+               _this.mockName = "一";
+            }
+        },
+        mockCopy(e){
+            this.new();
+            let cop = this.copyBtn;
+        },
+        new(){
+            let btns = document.querySelectorAll('Button');
+            this.copyBtn = new Clipboard(btns);
         }
     },
       components: {
@@ -201,11 +326,9 @@ export default {
     body{
         background-color: #fdfcf8;
     }
-    p{
-        height: auto;
-        word-wrap:break-word;
-        word-break:break-all;
-        overflow: hidden;
+    .scroll{
+        overflow-y:auto;
+        overflow-x:auto;
     }
     .head{
         width: 100%;
@@ -281,7 +404,7 @@ export default {
         word-break: break-all;
     }
     /* .author{
-        float: right;
+        
         height: 100px;
     }
     .authorMessage{
@@ -334,8 +457,7 @@ export default {
     }
     .Respmessage{
         /* height: 85px; */
-        padding-left: 10px;
-        text-align: left;
+        
     }
     .resphi{
         white-space: nowrap;
@@ -349,7 +471,7 @@ export default {
         margin: 0 auto;
     }
     .Params{
-        width: 40%;
+        width: 45%;
         padding-top: 40px;
         float: left;
         margin: 0 auto;
@@ -378,19 +500,34 @@ export default {
         border: 1px solid #aaa;
         font-size: 18px
     }
-    .Querys{
+    .Paramsmessageold p{
+        float: left;
+        width: 50%;
+        padding: 6px 15px 6px 6px;
+        border: 1px solid #DCDCDC;
+        color: #A9A9A9;
+        font-size: 18px
+    }
+    .Authors{
         width: 50%;
         padding-top: 40px;
         float: right;
         margin: 0 auto;
         padding-bottom: 40px;
-        /* border-bottom: 1px solid #aaa; */
+    }
+    .Querys{
+        width: 90%;
+        padding-top: 40px;
+        margin: 0 auto;
+        padding-bottom: 40px;
     }
     .Querys h2{
         text-align: left
     }
     .Querystitle{
+        
         background-color: #3F3F3F;
+        width: 100%;
     }
     .Querystitle p{
         float: left;
@@ -399,14 +536,34 @@ export default {
         padding: 5px 15px 5px 6px;
         height: 40px;
         line-height: 40px;
-        width: 50%;
+    }
+    .Querysmessage{
+        /* position: relative; */
+        display: -webkit-box;
     }
     .Querysmessage p{
-        float: left;
-        width: 50%;
+        /* float: left; */
         padding: 6px 15px 6px 6px;
         border: 1px solid #aaa;
-        font-size: 18px
+        font-size: 18px;
+        /* display: inline-block; */
+    }
+    .Querysmessageto{
+        /* position: relative; */
+        display: -webkit-box;
+    }
+    .Querysmessageto p{
+        /* float: left; */
+        padding: 6px 15px 6px 6px;
+        border: 1px solid #DCDCDC;
+        font-size: 18px;
+        /* display: inline-block; */
+    }
+    .test{
+        /* position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0 */
     }
     .SubApis{
         width: 90%;
@@ -429,11 +586,24 @@ export default {
         line-height: 40px;
         /* width: 50%; */
     }
+    .SubApismessage{
+        display: -webkit-box
+    }
     .SubApismessage p{
-        float: left;
+        /* float: left; */
         /* width: 50%; */
         padding: 6px 15px 6px 6px;
         border: 1px solid #aaa;
+        font-size: 18px
+    }
+    .SubApismessageto{
+        display: -webkit-box
+    }
+    .SubApismessageto p{
+        /* float: left; */
+        /* width: 50%; */
+        padding: 6px 15px 6px 6px;
+        border: 1px solid #DCDCDC;
         font-size: 18px
     }
     .click{
@@ -462,15 +632,22 @@ export default {
         padding: 5px 15px 5px 6px;
         height: 40px;
         line-height: 40px;
-        width: 50%;
     }
-    .Bodymessage .p{
+    .Bodymessage p{
         float: left;
-        width: 50%;
         height: 100%;
         /* text-align: left; */
         margin: 0;
         border-right: 1px solid #aaa;
+        padding: 6px 15px 6px 6px;
+        font-size: 18px
+    }
+    .Bodymessageto p{
+        float: left;
+        height: 100%;
+        /* text-align: left; */
+        margin: 0;
+        border-right: 1px solid #DCDCDC;
         padding: 6px 15px 6px 6px;
         font-size: 18px
     }
@@ -481,13 +658,72 @@ export default {
         text-align: left;
         border: 1px solid #aaa;
     }
-    .open{
+    .json-old{
+        text-align: left;
+        border: 1px solid #DCDCDC;
+    }
+    /* .open{
         display: inline-block;
         width: 22px;
-        font-size: 14px;
+        font-size: 18px;
         cursor: pointer;
         color: #fff;
         background-color: aquamarine
+    } */
+    .old{
+        border: #DCDCDC 1px solid;
+        color: #A9A9A9
+    }
+    .oldtitle{
+        font-size: 18px;
+        text-align: left;
+        cursor: pointer;
+        color: rgb(221,17,68)
+        /* border: 1px solid  rgb(221,17,68) */
+    }
+    .three{
+        width: 30%;
+    }
+    .seven{
+        width: 70%;
+    }
+    .mocktitle{
+        width: 90%;
+        margin: 0 auto;
+        background-color: #3F3F3F;
+    }
+    .mockmethod{
+        float: left;
+        width: 20%;
+        color: #fff;
+        font-weight: bold;
+        padding: 5px 15px 5px 6px;
+    }
+    .mockpath{
+        float: left;
+        width: 70%;
+        color: #fff;
+        font-weight: bold;
+        padding: 5px 15px 5px 6px;
+
+    }
+    .mockaction{
+        color: #fff;
+        text-align: center;
+        float: left;
+        width: 10%;
+        padding: 5px 15px 5px 6px;
+    }
+    .mockmessage{
+        width: 90%;
+        margin: 0 auto;
+        display: -webkit-box
+    }
+    .mockmessage p{
+        border: 1px solid #aaa;
+        font-size: 18px;
+        font-weight: 100;
+        padding: 6px 15px 6px 6px;
     }
 </style>
 

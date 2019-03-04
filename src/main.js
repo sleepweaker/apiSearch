@@ -10,7 +10,8 @@ import axios from 'axios'
 Vue.config.productionTip = false
 Vue.use(iview)  
 Vue.use(axios)  
-
+window.testHost = "http://192.168.200.8:17777";
+window.Host = "http://frank.onenet.com"
 
 
 /* eslint-disable no-new */

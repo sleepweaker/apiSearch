@@ -1,14 +1,14 @@
 <template>
     <div class="login-in" ref="oneNet">
 
-        <div class="username-in clear-float" v-if="isTypeApi">
-                <Input v-model="valueApi" size="large" placeholder="输入项目API" style="width: 480px;float:left" />
-                <Button type="primary" icon="ios-search" id="api" style="float:left;margin-left:20px;width:100px" @click="nameSearch($event.currentTarget.id)">Search</Button>
+        <div class="searchInput clear-float" v-if="isTypeApi">
+                <input v-model="valueApi" size="large" placeholder="输入项目API" style="width: 480px;" />
+                <Button type="primary" icon="ios-search" style="float:left;height:36px;border-radius:0;;" @click="nameSearch(true)">Search</Button>
         </div>
-        <div class="username-in  clear-float" v-if="isTypeName">
-                <Input v-model="valueName" size="large" placeholder="项目名称" style="width: 150px;float:left" />
-                <Input v-model="valueAddrs" size="large" placeholder="地址" style="width: 330px;float:left;" />
-                <Button type="primary" icon="ios-search" id="name" style="float:left;margin-left:20px" @click="nameSearch($event.currentTarget.id)">Search</Button>
+        <div class="searchInput  clear-float" v-if="isTypeName">
+                <input v-model="valueName" size="large" placeholder="项目名称" style="width: 150px;float:left" />
+                <input v-model="valueAddrs" size="large" placeholder="地址" style="width: 330px;float:left;" />
+                <Button type="primary" icon="ios-search" style="float:left;height:36px;border-radius:0;" @click="nameSearch(false)">Search</Button>
         </div>  
     </div>
 </template>
@@ -27,53 +27,29 @@ export default {
             valueAddrs:""
         }
     },
-    mounted () {
-        
-    },
     created:function(){
         let that = this
         document.onkeydown = function(e){
-            let type = ""
             if(window.event.keyCode == 13){
-            that.nameSearch(that.isTypeApi?'api':'name')
+            that.nameSearch(that.isTypeApi)
         }
         }
     },
     watch:{
       'loginMessage' : function(){
-          this.valueChange();
+        this.isTypeApi = !this.isTypeApi
+        this.isTypeName = !this.isTypeName
       }
     },
     methods:{
         nameSearch(e){
-            let _this = this
-            console.log(e);
-            switch (e) {
-                case "api":
+            if(e){
                     this.$router.push({path:"/show",query:{data:this.valueApi,type:"api"}});
-                    break;
-                case "name":
+                }else{
                     this.$router.push({path:"/show",query:{dataAddrs:this.valueAddrs,dataName:this.valueName,type:"name"}});
-                    break;
-                default:
-                    break;
-            }
+                }
         },
-        valueChange(){
-            console.log(this.loginMessage)
-            switch (this.loginMessage) {
-                case "Api":
-                    this.isTypeApi = true
-                    this.isTypeName = false
-                    break;
-                case "Name":
-                    this.isTypeApi = false
-                    this.isTypeName = true
-                    break;
-                default:
-                    break;
-            }
-        }
+
     }
 }
 </script>
@@ -88,8 +64,30 @@ export default {
     .clear-float{
         zoom:1
     }
-    .username-in{
-        margin-top: 50px;
+       .searchInput{
+        padding-top: 50px;
+    }
+    .searchInput input{
+        height:36px;
+        padding:4px 7px;
+        line-height:1.5;
+        color: #495060;
+        font-family: inherit;
+        overflow: visible;
+        /* width: 480px; */
+        border: 1px solid #dddee1;
+        float:left;
+        border-color:#dddee1;
+        border-radius:0;
+        background-color: #fff;
+        background-image: none;
+        position: relative;
+        cursor: text;
+        transition: border .2s ease-in-out,background .2s ease-in-out,box-shadow .2s ease-in-out;
+        font-size:14px;
+    }
+    ::-webkit-input-placeholder{
+        color: #dddee1;
     }
 
 </style>

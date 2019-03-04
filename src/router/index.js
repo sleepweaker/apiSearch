@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Index from '@/pages/index'
 import Show from '@/pages/Show'
 import FrankShow from '@/pages/frankShow'
-
+import PrjSub from '@/pages/prjSub'
 Vue.use(Router)
 
 export default new Router({
@@ -22,6 +22,12 @@ export default new Router({
       path: '/frankShow',
       name: 'FrankShow',
       component: FrankShow,
+      meta: { keepAlive: true }
+    },
+    {
+      path: '/prjSub',
+      name: 'PrjSub',
+      component: PrjSub,
       meta: { keepAlive: true }
     }
   ]
