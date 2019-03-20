@@ -1,6 +1,6 @@
 <template id="list-item">
 <div>    
-    <div class="open" @click="openShow">{{openValue}}</div>
+    <div class="open-json" @click="openShow">{{openValue}}</div>
     <pre class="Respmessage" :class="{resphi:isActive}" ref="respMessage">{{item}}</pre>
 </div>
 </template>
@@ -28,8 +28,8 @@ export default {
 
 }
 </script>
-<style>
-    .open{
+<style scoped>
+    .open-json{
         float: right;
         width: 22px;
         font-size: 18px;

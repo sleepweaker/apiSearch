@@ -5,8 +5,8 @@
             </div>
             <div class="index-login-main-center">
                 <div class="login-chioce clear-float">
-                    <h2 class="login-onenet" v-bind:class="{onenetactive:oneIsActive}" @click="cleanHover(true)" ref="one">API</h2>
                     <h2 class="login-heport" v-bind:class="{heportactive:heIsActive}" @click="cleanHover(false)" id="hePort" ref="port">项目名字</h2>
+                    <h2 class="login-onenet" v-bind:class="{onenetactive:oneIsActive}" @click="cleanHover(true)" ref="one">API</h2>
                 </div>
             </div>
             <Search-Input ref="SearchInput" v-bind:loginMessage="message"></Search-Input>
@@ -20,7 +20,7 @@ import SearchInput from '../components/searchInput';
 export default {
    data () {
   	return {    
-        portNow:true,
+        portNow:false,
         oneIsActive:false,
         heIsActive:false, 
         message:true,
@@ -56,10 +56,10 @@ export default {
         content:"";
         visibility:hidden;
         height:0
-        }
+    }
     .clear-float{
         zoom:1
-        }
+    }
     .index-login-banner{
         height: 80%;
         display: -webkit-box;
@@ -87,15 +87,14 @@ export default {
         color: rgb(170, 170, 170);
     }
     .login-onenet{
-        float: left;
+        float: right;
         width: 132px;
         text-align: center;
         line-height: 52px; 
         font-size: 16px;
         cursor: pointer;
         margin: 0;
-        color: #19bbff;
-        border-bottom: 2px solid #19bbff;    
+            
     }
     .onenetactive{
         color: rgb(170, 170, 170);
@@ -105,13 +104,15 @@ export default {
         border-bottom: 2px solid #aaa;
     }
     .login-heport{
-        float: right;
+        float: left;
         width: 132px;
         text-align: center;
         line-height: 52px; 
         font-size: 16px;
         cursor: pointer;
-        margin: 0;  
+        margin: 0;
+        color: #19bbff;
+        border-bottom: 2px solid #19bbff;  
     }
     .login-heport:hover{
         border-bottom: 2px solid #aaa;

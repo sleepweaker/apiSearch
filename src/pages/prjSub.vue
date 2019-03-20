@@ -8,10 +8,18 @@
         <div class="searchShow" style="margin-top:10px">
             <Table :columns="columnsBranch" ref="sss" :data="dataBranch" ></Table>
         </div>
+        <Modal
+            v-model="apimodal"
+            title="删除"
+            @on-ok="deleteQuerry"
+            @on-cancel="cancel">
+            <p>你确定要删除吗</p>
+        </Modal>
     </div>
 </template>
 <script>
 import Axios from 'axios';
+let delImg = require('../assets/delete.png')
 export default {
     props:[],
     data(){
@@ -160,19 +168,24 @@ export default {
                         width:180,
                         align: 'center',
                            render: (h, params) => {
-                            return h('div', {
+                            return h('div',[
+                                h('span', {
                                     props: {
                                         type: 'primary',
                                         size: 'big',
                                     },
                                     style:{
-                                        display:'block',
+                                        display:'inline-block',
                                         backgroundColor:'#2d8cf0',
                                         color:'#fff',
                                         height:'30px',
                                         lineHeight:'30px',
+                                        width:'50px',
                                         borderRadius:'5px',
                                         cursor:'pointer',
+                                        verticalAlign: 'top',
+                                        marginRight:'10px'
+                                        
                                     },
                                     on: {
                                         click:()=>{
@@ -180,9 +193,70 @@ export default {
                                         },
                                        
                                     }
-                                },"预览")
+                                },"预览"),
+                                h('img', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'big',
+                                        
+                                    },
+                                    domProps:{
+                                        src:delImg,
+                                        alt:'删除'
+                                    },
+                                    'class':{
+                                        // textclasshid:this.textHid,
+                                        textclassshow:this.texShow
+                                    },
+                                    style:{
+                                        display:'inline-block',
+                                        // backgroundColor:'#2d8cf0',
+                                        color:'#000',
+                                        height:'30px',
+                                        lineHeight:'30px',
+                                        borderRadius:'5px',
+                                        cursor:'pointer',
+                                        margin: '0 auto',
+                                        verticalAlign: 'top'
+                                    },
+                                    on: {
+                                        click:()=>{
+                                            this.deletePro(params)
+                                        },
+                                    }
+                                },)
+                            ])
                            }
                     },
+                    {
+                        // type:'selection',
+                        width:80,
+                        renderHeader:(h,params)=>{
+                            return h('Checkbox',{
+                                props:{
+                                    value:this.isSelect
+                                },
+                                'class':{'isSelection':this.isSelectionData},
+                                on:{
+                                'on-change':()=>{
+                                        this.selectAll()
+                                }}
+                            })
+                        },
+                        render:(h,params)=>{
+                            return h('Checkbox',{
+                                props:{
+                                    value:this.isSelect
+                                },
+                                'class':{'isSelection':this.isSelectionData},
+                                on:{
+                                'on-change':()=>{
+                                        this.addDeleteData(params)
+                                }}
+                            })
+                        }    
+                        
+                    }
                     // {
                     //     title: 'action',
                     //     key: 'action',
@@ -216,6 +290,10 @@ export default {
             dataBranch:[],
             name:'',
             branch:'',
+            deleteData:[],
+            isSelect:false,
+            isSelectionData:true,
+            apimodal:false,
         }
     },
     watch:{
@@ -226,7 +304,11 @@ export default {
         }
     },
     mounted(){
-        let _this = this    
+        this.getData()
+    },
+    methods:{
+        getData(){
+            let _this = this    
         if (_this.$route.query.dataUp!=undefined) {
             Axios.get('http://frank.onenet.com/search/upper-apis?sub_api='+_this.$route.query.dataUp).then(function(response){
                 _this.dataBranch = JSON.parse(response.data.data);
@@ -236,14 +318,14 @@ export default {
         }else{
             Axios.get('http://frank.onenet.com/search/apis?prj_name='+_this.$route.query.dataName+'&branch='+_this.$route.query.dataBranch).then(function(response){
                 _this.dataBranch = JSON.parse(response.data.data)
+                _this.dataCopy = {..._this.dataBranch}
                 _this.id = _this.dataBranch[0].prj_name;
                 _this.branch = _this.dataBranch[0].branch;
             })
-            // _this.dataBranch = [{method:'get',path:123,desc:'message',branch:'123'},{method:'GET',path:'/asd/b',desc:'message',branch:'123'},{method:'GET',path:'/asd/b123',desc:'message',branch:'123'}]
-            this.dataCopy = {...this.dataBranch}
+            // _this.dataBranch = [{method:'get',id:123,path:123,desc:'message',branch:'123'},{method:'GET',id:12,path:'/asd/b',desc:'message',branch:'123'},{method:'GET',id:22,path:'/asd/b123',desc:'message',branch:'123'}]
+            
         }
-    },
-    methods:{
+        },
         apiSearch(data,index){
             let hrf = this.$router.resolve({name:"FrankShow",query:{datapId:data.row.id,dataName:this.name,dataBranch:this.branch}})
             window.open(hrf.href,'_blank')
@@ -274,7 +356,9 @@ export default {
                 return str
             }
         },  
-
+        cancel(){
+            this.apimodal= false
+        },
         changeData(str){
             this.dataBranch = [];
             let reg = new RegExp(str)
@@ -288,12 +372,39 @@ export default {
                     this.dataBranch.push(this.dataCopy[i]);
                 }
             }
-            
+        },
 
-            
-            
-        }
-        
+        deletePro(data){
+            console.log(this.deleteData)
+            if(this.deleteData.length!=0){
+                this.apimodal = true;
+            }else{
+                this.isSelectionData = !this.isSelectionData
+            }  
+        },
+        addDeleteData(data){
+            let num = this.deleteData.indexOf(data.row.id)
+            if(num!=-1){
+                this.deleteData.splice(num,1)
+            }else{
+                this.deleteData.push(data.row.id)
+            }
+        },
+        deleteQuerry(){
+            Axios.get('http://frank.onenet.com/api/batch-del?id_list='+this.deleteData).then(function(response){
+                _this.$Message.success('删除成功');
+                this.getData();
+            })
+        },
+        selectAll(){
+                this.isSelect = !this.isSelect;
+                this.deleteData = [];
+                if(this.isSelect == true){
+                    for(let i = 0;i<this.dataBranch.length;i++){
+                        this.deleteData.push(this.dataBranch[i].id)
+                    }
+                }
+            },
         // clearColor(){
         //     let lightArr = document.getElementsByClassName('heightLight')
         //     for(let i = 0; i<lightArr.length;i++){
@@ -304,7 +415,7 @@ export default {
     },
 }
 </script>
-<style scoped>
+<style >
     .clear-float:after{
         display:block;
         clear:both;
@@ -341,6 +452,9 @@ export default {
         box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1), 0 1px rgba(0,0,0,0.1);
     }
     .height-light{
-        background-color: black;
+        background-color: black;  
+    }
+    .isSelection{
+        visibility:hidden
     }
 </style>

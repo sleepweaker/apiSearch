@@ -20,8 +20,8 @@ export default {
     props:['loginMessage'],
     data (){
         return{
-            isTypeApi:true,
-            isTypeName:false,
+            isTypeApi:false,
+            isTypeName:true,
             valueApi:"",
             valueName:"",
             valueAddrs:""

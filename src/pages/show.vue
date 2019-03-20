@@ -30,16 +30,10 @@
         </div>
         <div class="searchShow" style="margin-top:10px">
             <Table :columns="columnsApi" :data="dataApi" v-if="apiShows"></Table>
-            <Table :columns="columnsName" :data="dataName" v-if="nameShow"></Table>
+            <Table :columns="columnsName" :data="dataName" v-if="nameShow" :row-class-name='rowClassName'></Table>
             <Table :columns="columnsApi" :data="dataUp" v-if="upShow"></Table>
         </div>
-        <Modal
-            v-model="apimodal"
-            title="删除"
-            @on-ok="deleteQuerry"
-            @on-cancel="cancel">
-            <p>你确定要删除吗</p>
-        </Modal>
+
         <Modal
             v-model="nameModal"
             title="项目删除"
@@ -203,35 +197,7 @@
                                 },)
                            }
                     },
-                                        {
-                        // type:'selection',
-                        width:80,
-                        renderHeader:(h,params)=>{
-                            return h('Checkbox',{
-                                props:{
-                                    value:this.isSelect
-                                },
-                                'class':{'isSelection':this.isSelectionData},
-                                on:{
-                                'on-change':()=>{
-                                        this.selectAll()
-                                }}
-                            })
-                        },
-                        render:(h,params)=>{
-                            return h('Checkbox',{
-                                props:{
-                                    value:this.isSelect
-                                },
-                                'class':{'isSelection':this.isSelectionData},
-                                on:{
-                                'on-change':()=>{
-                                        this.addDeleteData(params)
-                                }}
-                            })
-                        }    
-                        
-                    }
+                                        
                 ],
                 columnsUp: [
                     {
@@ -355,7 +321,7 @@
                                 },
                                 class:{
                                     'fold':params.row.fold,
-                                    'open':!params.row.fold
+                                    'openFold':!params.row.fold
                                 },
                                 on: {
                                     click:()=>{
@@ -387,8 +353,9 @@
                     {
                         title: 'id',
                         key: 'id'
+                        
                     },
-                     {
+                    {
                         title: 'action',
                         key: 'action',
                         align: 'center',
@@ -417,7 +384,7 @@
                                         height:'30px',
                                         lineHeight:'30px',
                                         borderRadius:'5px',
-
+                                        // backgroundColor:(params.row.expend=='true')?'#D1D1D1':'',
                                         cursor:'pointer',
                                         margin: '0 20px',
                                     },
@@ -448,6 +415,7 @@
                                         height:'30px',
                                         lineHeight:'30px',
                                         borderRadius:'5px',
+                                        // backgroundColor:(params.row.expend=='true')?'#D1D1D1':'',
                                         cursor:'pointer',
                                         margin: '0 auto',
                                     },
@@ -456,7 +424,28 @@
                                             this.deleteNAmePro(params)
                                         },
                                     }
-                                },)
+                                },
+                                ),
+                                h('span', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'big',
+                                        
+                                    },
+                                    
+                                    style:{
+                                        display:(params.row.expend=='true'&&params.row.fold!=true)?'inline-block' : 'none',
+                                        // backgroundColor:'#2d8cf0',
+                                        color:'#000',
+                                        height:'30px',
+                                        lineHeight:'30px',
+                                        borderRadius:'5px',
+                                        // backgroundColor:(params.row.expend=='true')?'#D1D1D1':'',
+                                        cursor:'pointer',
+                                        margin: '0 auto',
+                                    },
+
+                                },'action')
                                 ],)
                            }
                     },
@@ -536,20 +525,19 @@
                         .catch(function(err){
                             console.log(err);
                         });
-                        _this.dataApi =[{method:'POST',path:213,desc:123,branch:3211,id:12},{method:'post',path:213,desc:123,branch:3211,id:11},{method:'post',path:213,desc:123,branch:3211},{method:'post',path:213,desc:123,branch:3211}]
+                        // _this.dataApi =[{method:'POST',path:213,desc:123,branch:3211,id:12},{method:'post',path:213,desc:123,branch:3211,id:11},{method:'post',path:213,desc:123,branch:3211},{method:'post',path:213,desc:123,branch:3211}]
                     break;
                 case "name":
                         axios.get('http://frank.onenet.com/search/project?addr='+this.valueAddrs+'&prj_name='+this.valueName,{
                         }).then(function(response){
-                            // _this.dataName = 
-                            _this.dataName = this.dataFold(JSON.parse(response.data.data))
+                            _this.dataName = _this.dataFold(JSON.parse(response.data.data))
                         })
                         .catch(function(err){
                             console.log(err);
                         });
                         
-                        _this.dataName =[{name:123,branch:213,scheme:123,addr:3211,id:1},{name:1234,branch:213,scheme:123,addr:3211,id:2},{name:123,branch:213,scheme:123,addr:3211,id:3},{name:123,branch:213,scheme:123,addr:3211,id:4},{name:'asdf',branch:213,scheme:123,addr:3211,id:5},{name:'asdf',branch:213,scheme:123,addr:3211,id:6},{name:'asdf',branch:213,scheme:123,addr:3211,id:7},{name:'asdf',branch:213,scheme:123,addr:3211,id:8}]
-                        _this.dataName = this.dataFold(_this.dataName)
+                        // _this.dataName =[{name:123,branch:'a',scheme:123,addr:3211,id:1},{name:1234,branch:'b',scheme:123,addr:3211,id:2},{name:123,branch:'c',scheme:123,addr:3211,id:3},{name:123,branch:'d',scheme:123,addr:3211,id:4},{name:'asdf',branch:213,scheme:123,addr:'g',id:5},{name:'asdf',branch:213,scheme:123,addr:'e',id:6},{name:'asdf',branch:213,scheme:123,addr:'as',id:7},{name:'asdf',branch:213,scheme:123,addr:'bc',id:8}]
+                        // _this.dataName = this.dataFold(_this.dataName)
                     break;
                 case "up":
                     axios.get('http://frank.onenet.com/search/upper-apis?sub_api='+this.valueApi,{
@@ -566,65 +554,44 @@
                     break;
                 }
             },
-            deletePro(data){
-                
-                if(this.deleteData.length!=0){
-                    this.apimodal = true;
-                }else{
-                    this.isSelectionData = !this.isSelectionData
-                }  
-            },
-            addDeleteData(data){
-                let num = this.deleteData.indexOf(data.row.id)
-                if(num!=-1){
-                    this.deleteData.splice(num,1)
-                }else{
-                    this.deleteData.push(data.row.id)
-                }
-            },
+            
             deleteNAmePro(data){
                 this.deleteNameData = data.row.id;
                 this.nameModal = true;
             },
             deleteQuerry(){
+                let _this = this
                 this.$axios.post('http://frank.onenet.com/api/batch-del?id_list='+this.deleteData).then(response => {
-                    this.$Message.success('删除成功');
-                    this.nameSearch('api')
+                    _this.$Message.success('删除成功');
+                    _this.nameSearch('api')
                 }).catch(err => {
-                    this.$Message.error(err);
+                    // _this.$Message.error(err);
                 })
             },
-            selectAll(){
-                this.isSelect = !this.isSelect;
-                this.deleteData = [];
-                if(this.isSelect == true){
-                    for(let i = 0;i<this.dataName.length;i++){
-                        this.deleteData.push(this.dataName[i].id)
-                    }
-                }
-            },
+            
             cancel(){
                 this.apimodal = false;
                 this.nameModal = false;
             },
             deleteNameQuerry(){
+                let _this = this
                 this.$axios.post('http://frank.onenet.com/project/del?pid='+this.deleteNameData).then(response => {
-                    this.$Message.success('删除成功')
+                    _this.$Message.success('删除成功')
                     let path = null
                     let foldpath = null
-                    path = this.dataName.findIndex(e=>{
-                        return e.id == this.deleteNameData;
+                    path = _this.dataName.findIndex(e=>{
+                        return e.id == _this.deleteNameData;
                     })
-                    this.dataName.splice(path,1)
-                    foldpath = this.dataName.findIndex(e=>{
-                        e.name == this.dataName[path].name;
+                    _this.dataName.splice(path,1)
+                    foldpath = _this.dataName.findIndex(e=>{
+                        e.name == _this.dataName[path].name;
                     })
-                    this.dataName[foldpath].expendValue = this.dataName[foldpath].expendValue.filter(e=>{
-                        e.id != this.deleteNameData;
+                    _this.dataName[foldpath].expendValue = _this.dataName[foldpath].expendValue.filter(e=>{
+                        e.id != _this.deleteNameData;
                     })
                 }).catch(err => {
-                    this.$Message.error(err);
-                })
+                    
+            })
                 
             },
             //处理数据进行折叠
@@ -638,15 +605,26 @@
                         fold = data.filter(element => {
                             return element.name == e.name
                         })
-                        if(fold.length>1){
-                            newData = newData.filter(element => {
-                                return element.name != e.name
-                            })
-                            newData.push({name:e.name,expend:'true',expendValue:fold,fold:true})
-                            oldFind.push(e.name)
-                        }
+                        fold.sort((a,b)=>{
+                            let addra = a.branch;
+                            let addrb = b.branch;
+                            if(addra < addrb){
+                                return -1;
+                            }
+                            if(addra  >addrb){
+                                return 1;
+                            }
+                            return 0;
+                        });
+                        newData = newData.filter(element => {
+                            return element.name != e.name
+                        })
+                        newData.push({name:e.name,expend:'true',expendValue:fold,fold:true})
+                        oldFind.push(e.name)
+                        
                     }
                 });
+                
                 return newData
             },
             //数据展开
@@ -655,17 +633,32 @@
                 // data.fold = !this.fold;
                 if(data.row.fold == true){
                     data.row.expendValue.unshift(num+1,0)
+                    this.dataName[num].branch='分支';
+                    this.dataName[num].scheme='scheme';
+                    this.dataName[num].addr='地址';
+                    this.dataName[num].id='id';
                     Array.prototype.splice.apply(this.dataName, data.row.expendValue)
+                    console.log(this.dataName)
                     //通过这个才会重新渲染
                     this.dataName.splice()
                     this.dataName[data.index].fold = false
                 }else{
                     this.dataName.splice(num+1,data.row.expendValue.length)
+                    this.dataName[num].branch='';
+                    this.dataName[num].scheme='';
+                    this.dataName[num].addr='';
+                    this.dataName[num].id='';
                     data.row.fold = true
                     this.dataName[data.index].fold = true
                 }
                 
                 // console.log()
+            },
+            rowClassName(row, index){
+                // console.log(row)
+                if(row.expend == "true"){
+                    return 'expendColor';
+                }
             }
         }
     }
@@ -842,10 +835,13 @@
         height: 15px;
         background: url('../assets/fold.png') no-repeat;
     }
-    .open{
+    .openFold{
         width: 15px;
         height: 15px;
         background: url('../assets/open.png') no-repeat;
+    }
+     .ivu-table .expendColor td{
+        background-color: #F5F5F5 !important;
     }
 </style>
 
